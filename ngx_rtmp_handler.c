@@ -868,6 +868,7 @@ ngx_rtmp_set_chunk_size(ngx_rtmp_session_t *s, ngx_uint_t size)
 
                 bi->pos += (ngx_cpymem(bo->last, bi->pos,
                             bo->end - bo->last) - bo->last);
+                bo->last = bo->end; /* bugfix: lost data when hit here */
                 lo->next = ngx_rtmp_alloc_in_buf(s);
                 lo = lo->next;
                 if (lo == NULL) {
