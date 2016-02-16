@@ -92,9 +92,6 @@ ngx_rtmp_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     ngx_rtmp_conf_ctx_t         *ctx;
     ngx_rtmp_core_srv_conf_t    *cscf, **cscfp;
     ngx_rtmp_core_main_conf_t   *cmcf;
-#if (nginx_version >= 1009012)
-    ngx_module_t    **ngx_modules = cf->cycle->modules;
-#endif
 
     ctx = ngx_pcalloc(cf->pool, sizeof(ngx_rtmp_conf_ctx_t));
     if (ctx == NULL) {
@@ -105,14 +102,7 @@ ngx_rtmp_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     /* count the number of the rtmp modules and set up their indices */
 
-    ngx_rtmp_max_module = 0;
-    for (m = 0; ngx_modules[m]; m++) {
-        if (ngx_modules[m]->type != NGX_RTMP_MODULE) {
-            continue;
-        }
-
-        ngx_modules[m]->ctx_index = ngx_rtmp_max_module++;
-    }
+    ngx_rtmp_max_module = ngx_count_modules(cf->cycle, NGX_RTMP_MODULE);
 
 
     /* the rtmp main_conf context, it is the same in the all rtmp contexts */
@@ -151,13 +141,13 @@ ngx_rtmp_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
      * of the all rtmp modules
      */
 
-    for (m = 0; ngx_modules[m]; m++) {
-        if (ngx_modules[m]->type != NGX_RTMP_MODULE) {
+    for (m = 0; cf->cycle->modules[m]; m++) {
+        if (cf->cycle->modules[m]->type != NGX_RTMP_MODULE) {
             continue;
         }
 
-        module = ngx_modules[m]->ctx;
-        mi = ngx_modules[m]->ctx_index;
+        module = cf->cycle->modules[m]->ctx;
+        mi = cf->cycle->modules[m]->ctx_index;
 
         if (module->create_main_conf) {
             ctx->main_conf[mi] = module->create_main_conf(cf);
@@ -184,12 +174,12 @@ ngx_rtmp_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     pcf = *cf;
     cf->ctx = ctx;
 
-    for (m = 0; ngx_modules[m]; m++) {
-        if (ngx_modules[m]->type != NGX_RTMP_MODULE) {
+    for (m = 0; cf->cycle->modules[m]; m++) {
+        if (cf->cycle->modules[m]->type != NGX_RTMP_MODULE) {
             continue;
         }
 
-        module = ngx_modules[m]->ctx;
+        module = cf->cycle->modules[m]->ctx;
 
         if (module->preconfiguration) {
             if (module->preconfiguration(cf) != NGX_OK) {
@@ -215,13 +205,13 @@ ngx_rtmp_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     cmcf = ctx->main_conf[ngx_rtmp_core_module.ctx_index];
     cscfp = cmcf->servers.elts;
 
-    for (m = 0; ngx_modules[m]; m++) {
-        if (ngx_modules[m]->type != NGX_RTMP_MODULE) {
+    for (m = 0; cf->cycle->modules[m]; m++) {
+        if (cf->cycle->modules[m]->type != NGX_RTMP_MODULE) {
             continue;
         }
 
-        module = ngx_modules[m]->ctx;
-        mi = ngx_modules[m]->ctx_index;
+        module = cf->cycle->modules[m]->ctx;
+        mi = cf->cycle->modules[m]->ctx_index;
 
         /* init rtmp{} main_conf's */
 
@@ -286,12 +276,12 @@ ngx_rtmp_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         return NGX_CONF_ERROR;
     }
 
-    for (m = 0; ngx_modules[m]; m++) {
-        if (ngx_modules[m]->type != NGX_RTMP_MODULE) {
+    for (m = 0; cf->cycle->modules[m]; m++) {
+        if (cf->cycle->modules[m]->type != NGX_RTMP_MODULE) {
             continue;
         }
 
-        module = ngx_modules[m]->ctx;
+        module = cf->cycle->modules[m]->ctx;
 
         if (module->postconfiguration) {
             if (module->postconfiguration(cf) != NGX_OK) {
