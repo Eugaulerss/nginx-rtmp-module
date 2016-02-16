@@ -336,6 +336,9 @@ ngx_rtmp_core_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     ngx_rtmp_conf_ctx_t        *ctx, *rtmp_ctx;
     ngx_rtmp_core_srv_conf_t   *cscf, **cscfp;
     ngx_rtmp_core_main_conf_t  *cmcf;
+#if (nginx_version >= 1009012)
+    ngx_module_t    **ngx_modules = cf->cycle->modules;
+#endif
 
     ctx = ngx_pcalloc(cf->pool, sizeof(ngx_rtmp_conf_ctx_t));
     if (ctx == NULL) {
@@ -423,6 +426,9 @@ ngx_rtmp_core_application(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     ngx_rtmp_conf_ctx_t        *ctx, *pctx;
     ngx_rtmp_core_srv_conf_t   *cscf;
     ngx_rtmp_core_app_conf_t   *cacf, **cacfp;
+#if (nginx_version >= 1009012)
+    ngx_module_t    **ngx_modules = cf->cycle->modules;
+#endif
 
     ctx = ngx_pcalloc(cf->pool, sizeof(ngx_rtmp_conf_ctx_t));
     if (ctx == NULL) {
@@ -496,6 +502,10 @@ ngx_rtmp_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 #if (NGX_HAVE_INET6)
     struct sockaddr_in6        *sin6;
 #endif
+#if (nginx_version >= 1009012)
+    ngx_module_t    **ngx_modules = cf->cycle->modules;
+#endif
+
 
     value = cf->args->elts;
 

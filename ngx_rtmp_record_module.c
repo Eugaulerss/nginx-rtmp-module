@@ -1199,6 +1199,9 @@ ngx_rtmp_record_recorder(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     ngx_rtmp_core_app_conf_t   *cacf, **pcacf, *rcacf;
     ngx_rtmp_record_app_conf_t *racf, **pracf, *rracf;
     ngx_rtmp_conf_ctx_t        *ctx, *pctx;
+#if (nginx_version >= 1009012)
+    ngx_module_t    **ngx_modules = cf->cycle->modules;
+#endif
 
     value = cf->args->elts;
 

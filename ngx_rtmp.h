@@ -394,8 +394,8 @@ typedef struct {
 
 
 #ifdef NGX_DEBUG
-char* ngx_rtmp_message_type(uint8_t type);
-char* ngx_rtmp_user_message_type(uint16_t evt);
+char *ngx_rtmp_message_type(uint8_t type);
+char *ngx_rtmp_user_message_type(uint16_t evt);
 #endif
 
 void ngx_rtmp_init_connection(ngx_connection_t *c);
@@ -408,14 +408,14 @@ void ngx_rtmp_free_handshake_buffers(ngx_rtmp_session_t *s);
 void ngx_rtmp_cycle(ngx_rtmp_session_t *s);
 void ngx_rtmp_reset_ping(ngx_rtmp_session_t *s);
 ngx_int_t ngx_rtmp_fire_event(ngx_rtmp_session_t *s, ngx_uint_t evt,
-        ngx_rtmp_header_t *h, ngx_chain_t *in);
+     ngx_rtmp_header_t *h, ngx_chain_t *in);
 
 
 ngx_int_t ngx_rtmp_set_chunk_size(ngx_rtmp_session_t *s, ngx_uint_t size);
 
 
 /* Bit reverse: we need big-endians in many places  */
-void * ngx_rtmp_rmemcpy(void *dst, const void* src, size_t n);
+void *ngx_rtmp_rmemcpy(void *dst, const void *src, size_t n);
 
 #define ngx_rtmp_rcpymem(dst, src, n) \
     (((u_char*)ngx_rtmp_rmemcpy(dst, src, n)) + (n))
@@ -477,10 +477,10 @@ ngx_int_t ngx_rtmp_amf_shared_object_handler(ngx_rtmp_session_t *s,
 #define ngx_rtmp_ref_put(b)                 \
     --ngx_rtmp_ref(b)
 
-ngx_chain_t * ngx_rtmp_alloc_shared_buf(ngx_rtmp_core_srv_conf_t *cscf);
+ngx_chain_t *ngx_rtmp_alloc_shared_buf(ngx_rtmp_core_srv_conf_t *cscf);
 void ngx_rtmp_free_shared_chain(ngx_rtmp_core_srv_conf_t *cscf,
         ngx_chain_t *in);
-ngx_chain_t * ngx_rtmp_append_shared_bufs(ngx_rtmp_core_srv_conf_t *cscf,
+ngx_chain_t *ngx_rtmp_append_shared_bufs(ngx_rtmp_core_srv_conf_t *cscf,
         ngx_chain_t *head, ngx_chain_t *in);
 
 #define ngx_rtmp_acquire_shared_chain(in)   \
