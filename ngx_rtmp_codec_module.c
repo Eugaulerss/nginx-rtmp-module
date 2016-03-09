@@ -17,8 +17,8 @@
 #define NGX_RTMP_CODEC_META_COPY    2
 
 
-static void * ngx_rtmp_codec_create_app_conf(ngx_conf_t *cf);
-static char * ngx_rtmp_codec_merge_app_conf(ngx_conf_t *cf,
+static void *ngx_rtmp_codec_create_app_conf(ngx_conf_t *cf);
+static char *ngx_rtmp_codec_merge_app_conf(ngx_conf_t *cf,
        void *parent, void *child);
 static ngx_int_t ngx_rtmp_codec_postconfiguration(ngx_conf_t *cf);
 static ngx_int_t ngx_rtmp_codec_reconstruct_meta(ngx_rtmp_session_t *s);
