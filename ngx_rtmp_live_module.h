@@ -58,7 +58,7 @@ struct ngx_rtmp_live_stream_s {
 
 
 typedef struct {
-    ngx_int_t                           nbuckets;
+    ngx_uint_t                          nbuckets;
     ngx_rtmp_live_stream_t            **streams;
     ngx_flag_t                          live;
     ngx_flag_t                          meta;
